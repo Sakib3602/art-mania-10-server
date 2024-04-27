@@ -27,6 +27,7 @@ async function run() {
     // Connect the client to the server	(optional starting in v4.7)
     // await client.connect();
     const database = client.db("artandcraft").collection("homecard");
+    const database1 = client.db("artandcraft").collection("additem");
     
     // to get home card data from db
     app.get('/homecard', async(req,res)=>{
@@ -42,6 +43,24 @@ async function run() {
       const query = { _id: new ObjectId(getId) };
       const result = await database.findOne(query);
       res.send(result)
+    })
+
+
+
+    app.post("/addItemData", async(req,res)=>{
+
+      const takeData = req.body;
+      
+      const result = await database1.insertOne(takeData);
+      res.send(result)
+
+
+    })
+    app.get("/addItemData", async(req,res)=>{
+
+      const cursor = await database1.find().toArray();
+      res.send(cursor)
+
     })
 
 
