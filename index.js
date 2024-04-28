@@ -33,7 +33,7 @@ async function run() {
     app.get('/homecard', async(req,res)=>{
      
       const cursor = await database.find().toArray();
-      console.log(cursor)
+      
       res.send(cursor)
 
     })
@@ -62,6 +62,69 @@ async function run() {
       res.send(cursor)
 
     })
+
+
+
+
+    app.get("/addItemData/:id", async(req,res)=>{
+      const id = req.params
+      
+      const query = { _id : new ObjectId(id)};
+      const result = await database1.findOne(query)
+      res.send(result)
+
+    })
+
+    app.get('/update/:id', async(req,res)=>{
+      const id = req.params
+      const query = { _id: new ObjectId(id) };
+      const result = await database1.findOne(query)
+      res.send(result)
+
+    })
+
+    app.put("/update/:id", async(req,res)=>{
+      const id = req.params;
+      console.log(id)
+      const filter = { _id : new ObjectId(id) };
+      const options = { upsert: true };
+      const coffee = req.body;
+      const updateDoc = {
+      $set: {
+        customization : coffee.customization,
+        email : coffee.email,
+        itemName : coffee.itemName,
+        photo : coffee.photo,
+        price : coffee.price,
+        process : coffee.process,
+        ratings : coffee.ratings,
+        stock : coffee.stock,
+        subcategory : coffee.subcategory,
+        username : coffee.username,
+       
+      },
+
+    };
+
+    const result = await database1.updateOne(filter, updateDoc, options);
+    res.send(result)
+    console.log("updated",result)
+    })
+
+
+
+   
+
+
+    app.get("/addItemValue/:email", async (req, res) => {
+      const email =req.params.email;
+      console.log(email)
+      const query = {email : email}
+      const result = await database1.find(query).toArray()
+      res.send(result)
+    });
+
+   
 
 
 
