@@ -6,12 +6,10 @@ const cors = require("cors");
 
 app.use(cors());
 app.use(express.json());
-// A95XIL7VbGicGJjn
-// artandcraft
-
+require('dotenv').config()
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 const uri =
-  "mongodb+srv://artandcraft:A95XIL7VbGicGJjn@cluster0.b5jufhp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+  `mongodb+srv://${process.env.VITE_NAME}:${process.env.VITE_PASSWORD}@cluster0.b5jufhp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -102,12 +100,22 @@ async function run() {
       const result = await database1.find(query).toArray();
       res.send(result);
     });
+    // 
+    app.get("/addItemValue/:email/:yesNo", async (req, res) => {
+      const email = req.params.email;
+      console.log(email);
+      const query = { email: email };
+      const result = await database1.find(query).toArray();
+      res.send(result);
+    });
 
 
 
 
-    app.delete('/deletedRoute/:email', async(req,res)=>{
-      const query = { email : req.params.email };
+
+
+    app.delete('/deletedRoute/:id', async(req,res)=>{
+      const query = { _id : new ObjectId(req.params.id) };
       console.log(query)
       const result = await database1.deleteOne(query);
       res.send(result)
